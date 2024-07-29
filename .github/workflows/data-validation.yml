@@ -1,0 +1,25 @@
+name: Data Validation
+
+on:
+  pull_request:
+    paths:
+      - 'data/country/**'
+
+jobs:
+  validate-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Validate JSON Metadata
+        run: |
+          find data/country -name "*.json" -exec jq empty {} \;
+
+      - name: Validate Directory Structure
+        run: |
+          if [ ! -d "data/country/nigeria" ]; then
+            echo "Nigeria directory does not exist"
+            exit 1
+          fi
+          # Add more directory structure checks as needed
